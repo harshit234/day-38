@@ -65,3 +65,45 @@ sim2 = cosine_similarity(vec1, vec3)
 print(f"{word1} vs {word2}:", sim1)
 print(f"{word1} vs {word3}:", sim2)
 
+def sentence_vector(sentence, model):
+    words = sentence.lower().split()
+    vectors = [model.wv[w] for w in words if w in model.wv]
+  
+    if not vectors:
+        return np.zeros(model.vector_size) 
+    return np.mean(vectors, axis=0)
+
+
+fallback_word = model.wv.index_to_key[0]
+
+
+if 'affordable' in model.wv:
+    affordable_anchor = model.wv['affordable']
+else:
+    print(f"Word 'affordable' not in vocabulary. Using '{fallback_word}' instead for affordable_anchor.")
+    affordable_anchor = model.wv[fallback_word]
+
+if 'flimsy' in model.wv:
+    quality_anchor = model.wv['flimsy']
+else:
+    print(f"Word 'flimsy' not in vocabulary. Using '{fallback_word}' instead for quality_anchor.")
+    quality_anchor = model.wv[fallback_word]
+
+def classify_cheap(sentence):
+    vec = sentence_vector(sentence, model)
+    
+  
+    if np.all(vec == 0):
+        return "Cannot classify: no known words in sentence"
+
+    sim_affordable = cosine_similarity(vec, affordable_anchor)
+    sim_quality = cosine_similarity(vec, quality_anchor)
+    
+    if sim_affordable > sim_quality:
+        return "affordable"
+    else:
+        return "low-quality"
+
+print(classify_cheap("These earbuds are cheap and worth the price"))
+print(classify_cheap("The material feels cheap and breaks easily"))
+
