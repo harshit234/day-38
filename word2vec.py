@@ -104,6 +104,17 @@ def classify_cheap(sentence):
     else:
         return "low-quality"
 
+
+model_win2 = Word2Vec(sentences, vector_size=100, window=2, min_count=1)
+model_win10 = Word2Vec(sentences, vector_size=100, window=10, min_count=1)
+
+def show_top_similar(word, model, label):
+    if word in model.wv:
+        print(f"Top 3 similar to '{word}' ({label}): {model.wv.most_similar(word, topn=3)}")
+
+show_top_similar('product', model_win2, "Window=2 (Syntactic/Interchangeable)")
+show_top_similar('product', model_win10, "Window=10 (Semantic/Topical)")
+
 print(classify_cheap("These earbuds are cheap and worth the price"))
 print(classify_cheap("The material feels cheap and breaks easily"))
 
