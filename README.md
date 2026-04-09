@@ -44,19 +44,10 @@ Compared similarity between two reviews using:
 
 ---
 
-## 🔍 Key Insights
-
 * Word2Vec captures semantic relationships but fails with polysemy
 * BOW fails due to lack of semantic understanding
 * TF-IDF improves weighting but still relies on exact words
 * Word2Vec captures word-level meaning
 * Sentence-BERT best captures full sentence meaning and context
 
-
-
----
-
-## 👤 Author
-
-Your Name
 
